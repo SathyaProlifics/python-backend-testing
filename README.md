@@ -74,12 +74,12 @@ Examples:
 ```bash
 curl -X GET http://localhost:5000/users
 
-curl -X POST http://localhost:5000/users/add \\
-  -H "Content-Type: application/json" \\
+curl -X POST http://localhost:5000/users/add \
+  -H "Content-Type: application/json" \
   -d '{"name":"John Doe","email":"john@example.com"}'
 
-curl -X PUT http://localhost:5000/users/update/1 \\
-  -H "Content-Type: application/json" \\
+curl -X PUT http://localhost:5000/users/update/1 \
+  -H "Content-Type: application/json" \
   -d '{"name":"John Updated","email":"john.updated@example.com"}'
 
 curl -X DELETE http://localhost:5000/users/delete/1
