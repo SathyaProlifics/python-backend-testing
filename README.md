@@ -6,183 +6,103 @@ step-1
 -->>now connect sql work bench with your rds credentials
 --->>now create database and run through workbench
 
+# Python Backend Testing (Flask)
 
+A small Flask backend used for testing MySQL/RDS connectivity and basic CRUD operations on a `users` table.
+
+## Overview
+
+This repository contains a minimal Flask app (`app.py`) that demonstrates connecting to a MySQL-compatible database (local or AWS RDS) and exposes simple REST endpoints to manage users.
+
+## Prerequisites
+- Python 3.8 or newer
+- pip
+- MySQL / MariaDB server or AWS RDS instance
+- git (optional)
+
+## Quickstart (local)
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/CloudTechDevOps/python-backend-testing.git
+cd python-backend-testing
+```
+
+
+3. Create the database and table (example):
+
+```sql
 CREATE DATABASE dev;
 USE dev;
 
 CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE
 );
+```
 
+4. Configure database connection:
 
-step-2
-launch ec2 instance with security group "all traffic enabled"
+Edit `app.py` and set the `db_config` values, or export environment variables before running (example shown for Linux/macOS):
 
-step-3
-attach iam role  "ec2-admin"
+```bash
+DB_HOST=your-db-host
+DB_USER=your-db-user
+DB_PASS=your-db-password
+DB_NAME=dev
+```
+5. Run the app:
 
-step-4
-install dependencies
+```bash
+python app.py
+```
 
-yum install python3-pip -y
-pip install flask mysql-connector-python
+The app listens on port 5000 by default (http://127.0.0.1:5000).
 
-step-5
-suppose if we are importing data from git-hub, we need to install git first to access git-hub account
-yum install git -y
+## API Endpoints
 
-step-6
-clone the git-hub
-git clone https://github.com/CloudTechDevOps/python-backend-testing.git
+- GET /users — return all users
+- GET /users/<id> — return user by id
+- POST /users/add — add a new user (JSON body: `{"name":"..","email":".."}`)
+- PUT /users/update/<id> — update a user (JSON body with `name` and/or `email`)
+- DELETE /users/delete/<id> — delete a user
 
-step-7
-[root@ip-172-31-15-35 ~]# ls
-python-backend-testing
-[root@ip-172-31-15-35 ~]# cd python-backend-testing/
-[root@ip-172-31-15-35 python-backend-testing]# ls
-app.py
+Examples:
 
-step-8
-[root@ip-172-31-15-35 python-backend-testing]# vi app.py
+```bash
+curl -X GET http://localhost:5000/users
 
-insert rds crentiantials
+curl -X POST http://localhost:5000/users/add \\
+  -H "Content-Type: application/json" \\
+  -d '{"name":"John Doe","email":"john@example.com"}'
 
-# Database Configuration
-db_config = {
-    'host': 'database-1.cv06coymad1g.ap-south-1.rds.amazonaws.com',    ##endpoints
-    'user': 'admin',                                                                                            ##username
-    'password': 'admin123',                                                                             ###password
-    'database': 'dev'  # Change to your actual database name
-
-step-9
-
-[root@ip-172-31-15-35 python-backend-testing]# python3 app.py                    #### run app.py
- * Serving Flask app 'app'
- * Debug mode: on
-WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5000
- * Running on http://172.31.15.35:5000
-
-Press CTRL+C to quit
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 124-338-485
-
-note-if we want to stop press "ctrl+c" to exit
-
-step-10
-open new console window and switch to root
-and then run command given below one-by-one
-
-
-### API Methods -->> we need to conduct all activities after backend-to rds -connection establish ###
-
-
-
-Updated Flask App with Full API Methods
-This includes:
-
-GET /users → Fetch all users
-POST /users/add → Add a new user
-GET /users/<id> → Fetch a single user by ID
-PUT /users/update/<id> → Update a user's info
-DELETE /users/delete/<id> → Delete a user
-
-#### Post method ###   --->To add new user post method 
-
-curl -X POST http://localhost:5000/users/add      -H "Content-Type: application/json"      -d '{"name":"John DDoe", "email":"john@example.com"}'
-
-[root@ip-172-31-15-35 ~]# curl -X POST http://localhost:5000/users/add      -H "Content-Type: application/json"      -d '{"name":"John DDoe", "email":"john@example.com"}'
-{
-  "message": "User added successfully"
-}
-
-
-#### Get method ###   --->To Fetch all users
-curl -X GET http://localhost:5000/users 
-
-[root@ip-172-31-15-35 ~]# curl -X GET http://localhost:5000/users
-[
-  {
-    "email": "john@example.com",
-    "id": 1,
-    "name": "John DDoe"
-  }
-]
-
-
-#### Get method ###  --->To Fetch single users
-curl -X GET http://localhost:5000/users/1 
-[root@ip-172-31-15-35 ~]# curl -X GET http://localhost:5000/users/1 
-{
-  "email": "john@example.com",
-  "id": 1,
-  "name": "John DDoe"
-}
-
-
-
-#### Put method ###  --->To update user post method 
-
-curl -X PUT http://localhost:5000/users/update/1 \
-     -H "Content-Type: application/json" \
-     -d '{"name": "John Updated", "email": "john.updated@example.com"}'
-
-[root@ip-172-31-15-35 ~]# curl -X PUT http://localhost:5000/users/update/1 \
-     -H "Content-Type: application/json" \
-     -d '{"name": "John Updated", "email": "john.updated@example.com"}'
-{
-  "message": "User updated successfully"
-}
-
-
-### how to check API request from external #########
-
-step-1
-https://web.postman.co/            ### signup with your credentials " git-hub or any other account
-
-step-2
-once to logged-in
-workspace----->>>>new---->>>select http
-
-step-3
-enter url to check api activities
- 
-http://43.204.228.245:5000/users    ### to check all users
-
-http://43.204.228.245:5000/users/1  ### to check user with id-1
-
-http://43.204.228.245:5000/users/2  ### to check user with id-2   etcccc
-
-
-
-### Delete method ### ----> To Delete user 
+curl -X PUT http://localhost:5000/users/update/1 \\
+  -H "Content-Type: application/json" \\
+  -d '{"name":"John Updated","email":"john.updated@example.com"}'
 
 curl -X DELETE http://localhost:5000/users/delete/1
+```
 
+## Running on a server (example notes)
+- Use a production WSGI server (gunicorn, uWSGI) behind a reverse proxy for production.
+- For AWS: run the Flask app on an EC2 instance and use an RDS MySQL instance for the DB. Ensure security groups allow the required traffic (DB port 3306 allowed from the app host).
 
-ps aux | grep app.py   # to check running or not python background
+To run the app in background on Linux:
 
-
-pkill -f app.py    # to kill process 
-
-
-## To run continuously  background without stop
-
+```bash
+# start
 nohup python3 app.py > flask.log 2>&1 &
+# check
+ps aux | grep app.py
+# stop
+pkill -f app.py
+```
 
+## Files
 
-### How It Works
-
-nohup prevents the process from stopping when you log out.
-& runs it in the background.
-> flask.log 2>&1 redirects output (stdout & stderr) to flask.log.
-
-
-
-
-
+- `app.py` — main Flask application
+- `requirements.txt` — Python dependencies
+- `test.sql` — example SQL (if present)
 
