@@ -111,7 +111,8 @@
   <p id="formMsg"></p>
 
   <script>
-    const backendIP = "http://3.80.111.134:5000"; // Replace with your backend IP if needed
+    const backendIP = "http://3.80.111.134:5000"; // for public deployment
+    // const backendIP = ""; // dont pass any value and uncomment this  linne for proxy and comment above line
 
     function loadUsers() {
       fetch(`${backendIP}/users`)
