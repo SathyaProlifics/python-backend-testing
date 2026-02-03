@@ -7,9 +7,9 @@ CORS(app)
 
 # Database Configuration
 db_config = {
-    'host': 'book-rds.cinsoscgioqa.us-east-1.rds.amazonaws.com',
+    'host': 'proxy-1770075663802-sathya-mysql-db.proxy-cujyaae6w17q.us-east-1.rds.amazonaws.com',
     'user': 'admin',
-    'password': 'SuperSecretPass123',
+    'password': 'YXWT7hL21L46[E<zOp|wpVS4v)5a',
     'database': 'dev'
 }
 
