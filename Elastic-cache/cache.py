@@ -12,7 +12,7 @@ CORS(app)
 # REDIS CONFIG
 # =========================
 redis_client = redis.Redis(
-    host='sathya-db-cache-fk5tcm.serverless.use1.cache.amazonaws.com:6379',
+    host='sathya-db-cache-fk5tcm.serverless.use1.cache.amazonaws.com',
     port=6379,
     ssl=True,
     decode_responses=True,
@@ -260,4 +260,5 @@ def delete_user(user_id):
 if __name__ == '__main__':
     print("🚀 Starting Flask API with Redis + RDS")
     app.run(host='0.0.0.0', port=5000, debug=True)
+
 
